@@ -75,8 +75,8 @@ class SettingsViewModel @Inject constructor(
                     _uiState.update { it.copy(connected = true) }
                     loadProvidersAndAgents()
                 }
-            } catch (_: Exception) {
-                _uiState.update { it.copy(connected = false) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(connected = false, error = "Connection failed: ${e.message}") }
             }
         }
     }
@@ -142,7 +142,8 @@ class SettingsViewModel @Inject constructor(
 
     private suspend fun loadProvidersAndAgents() {
         try {
-            val providers = repository.listProviders().getOrDefault(emptyList())
+            val providerResponse = repository.listProviders().getOrNull()
+            val providers = providerResponse?.all ?: emptyList()
             val agents = repository.listAgents().getOrDefault(emptyList())
             _uiState.update {
                 it.copy(
@@ -151,14 +152,16 @@ class SettingsViewModel @Inject constructor(
                 )
             }
             updateAvailableModels()
-        } catch (_: Exception) {}
+        } catch (e: Exception) {
+            _uiState.update { it.copy(error = "Failed to load providers: ${e.message}") }
+        }
     }
 
     private fun updateAvailableModels() {
         val selectedProviderId = _uiState.value.selectedProvider
         val provider = _uiState.value.providers.find { it.id == selectedProviderId }
         _uiState.update {
-            it.copy(availableModels = provider?.models ?: emptyList())
+            it.copy(availableModels = provider?.models?.values?.toList() ?: emptyList())
         }
     }
 

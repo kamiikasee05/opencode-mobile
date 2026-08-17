@@ -5,30 +5,46 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
+data class ProviderListResponse(
+    val all: List<Provider>? = null,
+    val connected: List<String>? = null,
+    val default: Map<String, JsonElement>? = null
+)
+
+@Serializable
 data class Provider(
     val id: String,
     val name: String? = null,
-    @SerialName("isConnected") val isConnected: Boolean = false,
-    val models: List<Model> = emptyList()
+    val api: String? = null,
+    val npm: String? = null,
+    val options: Map<String, JsonElement>? = null,
+    val models: Map<String, Model>? = null
 )
 
 @Serializable
 data class Model(
     val id: String,
     val name: String? = null,
-    val provider: ProviderRef? = null
+    val family: String? = null,
+    @SerialName("providerID") val providerId: String? = null,
+    val reasoning: Boolean? = null,
+    val attachment: Boolean? = null,
+    val cost: ModelCost? = null
 )
 
 @Serializable
-data class ProviderRef(
-    val id: String? = null
+data class ModelCost(
+    val input: Double? = null,
+    val output: Double? = null
 )
 
 @Serializable
 data class Agent(
-    val id: String,
-    val name: String? = null,
-    val description: String? = null
+    @SerialName("name") val id: String,
+    val description: String? = null,
+    val mode: String? = null,
+    val native: Boolean = false,
+    val options: Map<String, JsonElement>? = null
 )
 
 @Serializable

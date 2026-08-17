@@ -231,9 +231,9 @@ fun SettingsScreen(
                 ) {
                     uiState.agents.forEach { agent ->
                         DropdownMenuItem(
-                            text = {
+                                text = {
                                 Column {
-                                    Text(agent.name ?: agent.id)
+                                    Text(agent.id)
                                     if (agent.description != null) {
                                         Text(
                                             agent.description,

@@ -98,7 +98,9 @@ class ChatViewModel @Inject constructor(
             try {
                 repository.abortSession(sessionId)
                 _uiState.update { it.copy(isStreaming = false) }
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = "Abort failed: ${e.message}") }
+            }
         }
     }
 
@@ -107,7 +109,9 @@ class ChatViewModel @Inject constructor(
             try {
                 repository.respondPermission(sessionId, permissionId, allow, remember)
                 _uiState.update { it.copy(pendingPermission = null) }
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = "Permission response failed: ${e.message}") }
+            }
         }
     }
 
@@ -126,10 +130,12 @@ class ChatViewModel @Inject constructor(
 
     private fun handleMessagesUpdated(properties: JsonElement) {
         try {
-            val sessionIdProp = properties.jsonObject["properties"]?.jsonObject?.get("sessionID")?.jsonPrimitive?.contentOrNull
+            val obj = properties.jsonObject
+            val props = obj["properties"]?.jsonObject ?: obj
+            val sessionIdProp = props["sessionID"]?.jsonPrimitive?.contentOrNull
             if (sessionIdProp != sessionId) return
 
-            val info = properties.jsonObject["properties"]?.jsonObject?.get("info")
+            val info = props["info"]
             if (info != null) {
                 val message = Json.decodeFromJsonElement<Message>(info)
                 _uiState.update { state ->
@@ -143,7 +149,9 @@ class ChatViewModel @Inject constructor(
                     state.copy(messages = existing)
                 }
             }
-        } catch (_: Exception) {}
+        } catch (e: Exception) {
+            _uiState.update { it.copy(error = "Message update error: ${e.message}") }
+        }
     }
 
     private fun handleMessagesCompleted(properties: JsonElement) {
@@ -152,7 +160,8 @@ class ChatViewModel @Inject constructor(
 
     private fun handlePartUpdated(properties: JsonElement) {
         try {
-            val props = properties.jsonObject["properties"]?.jsonObject ?: return
+            val obj = properties.jsonObject
+            val props = obj["properties"]?.jsonObject ?: obj
             val sessionIdProp = props["sessionID"]?.jsonPrimitive?.contentOrNull
             if (sessionIdProp != sessionId) return
 
@@ -188,12 +197,15 @@ class ChatViewModel @Inject constructor(
 
                 state.copy(messages = existing, isStreaming = true)
             }
-        } catch (_: Exception) {}
+        } catch (e: Exception) {
+            _uiState.update { it.copy(error = "Part update error: ${e.message}") }
+        }
     }
 
     private fun handlePermissionAsked(properties: JsonElement) {
         try {
-            val props = properties.jsonObject["properties"]?.jsonObject ?: return
+            val obj = properties.jsonObject
+            val props = obj["properties"]?.jsonObject ?: obj
             val sessionIdProp = props["sessionID"]?.jsonPrimitive?.contentOrNull
             if (sessionIdProp != sessionId) return
 
@@ -206,6 +218,8 @@ class ChatViewModel @Inject constructor(
             )
 
             _uiState.update { it.copy(pendingPermission = permission) }
-        } catch (_: Exception) {}
+        } catch (e: Exception) {
+            _uiState.update { it.copy(error = "Permission error: ${e.message}") }
+        }
     }
 }

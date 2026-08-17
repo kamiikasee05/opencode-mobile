@@ -102,7 +102,7 @@ class OpenCodeRepository @Inject constructor(
     }
 
     // -- Providers & Agents --
-    suspend fun listProviders(): Result<List<Provider>> = runCatching {
+    suspend fun listProviders(): Result<ProviderListResponse> = runCatching {
         api.listProviders()
     }
 

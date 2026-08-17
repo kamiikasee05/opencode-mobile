@@ -77,7 +77,7 @@ class OpenCodeApi @Inject constructor(
     }
 
     // -- Providers & Agents --
-    suspend fun listProviders(): List<Provider> =
+    suspend fun listProviders(): ProviderListResponse =
         client.get(url("provider")).body()
 
     suspend fun listAgents(): List<Agent> =
