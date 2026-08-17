@@ -144,7 +144,8 @@ class SettingsViewModel @Inject constructor(
         try {
             val providerResponse = repository.listProviders().getOrNull()
             val providers = providerResponse?.all ?: emptyList()
-            val agents = repository.listAgents().getOrDefault(emptyList())
+            val agentResponse = repository.listAgents().getOrNull()
+            val agents = agentResponse?.all ?: emptyList()
             _uiState.update {
                 it.copy(
                     providers = providers,

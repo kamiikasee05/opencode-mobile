@@ -39,13 +39,24 @@ data class ModelCost(
 )
 
 @Serializable
+data class AgentListResponse(
+    val all: List<Agent>? = null,
+    val connected: List<String>? = null,
+    val default: Map<String, JsonElement>? = null
+)
+
+@Serializable
 data class Agent(
-    @SerialName("name") val id: String,
+    val id: String? = null,
+    val name: String? = null,
     val description: String? = null,
     val mode: String? = null,
     val native: Boolean = false,
     val options: Map<String, JsonElement>? = null
-)
+) {
+    /** Agent display ID — server may send "id" or "name" */
+    val displayId: String get() = id ?: name ?: "unknown"
+}
 
 @Serializable
 data class Config(
@@ -55,6 +66,7 @@ data class Config(
 
 @Serializable
 data class HealthResponse(
+    val healthy: Boolean? = null,
     val version: String? = null,
     val status: String? = null
 )

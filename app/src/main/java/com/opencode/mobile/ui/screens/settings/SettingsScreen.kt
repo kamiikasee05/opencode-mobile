@@ -229,25 +229,25 @@ fun SettingsScreen(
                     expanded = agentExpanded,
                     onDismissRequest = { agentExpanded = false }
                 ) {
-                    uiState.agents.forEach { agent ->
-                        DropdownMenuItem(
-                                text = {
-                                Column {
-                                    Text(agent.id)
-                                    if (agent.description != null) {
-                                        Text(
-                                            agent.description,
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
+                        uiState.agents.forEach { agent ->
+                            DropdownMenuItem(
+                                    text = {
+                                    Column {
+                                        Text(agent.displayId)
+                                        if (agent.description != null) {
+                                            Text(
+                                                agent.description,
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
                                     }
+                                },
+                                onClick = {
+                                    viewModel.selectAgent(agent.displayId)
+                                    agentExpanded = false
                                 }
-                            },
-                            onClick = {
-                                viewModel.selectAgent(agent.id)
-                                agentExpanded = false
-                            }
-                        )
+                            )
                     }
                 }
             }
