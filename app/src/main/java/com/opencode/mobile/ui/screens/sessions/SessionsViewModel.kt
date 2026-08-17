@@ -46,13 +46,14 @@ class SessionsViewModel @Inject constructor(
         }
     }
 
-    fun createSession() {
+    fun createSession(onCreated: (String) -> Unit = {}) {
         viewModelScope.launch {
             try {
                 val session = repository.createSession().getOrThrow()
                 _uiState.update {
                     it.copy(sessions = listOf(session) + it.sessions)
                 }
+                onCreated(session.id)
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message) }
             }

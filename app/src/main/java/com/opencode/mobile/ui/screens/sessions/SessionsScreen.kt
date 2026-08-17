@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun SessionsScreen(
     onSessionClick: (String) -> Unit,
+    onSessionCreated: (String) -> Unit,
     onSettingsClick: () -> Unit,
     viewModel: SessionsViewModel = hiltViewModel()
 ) {
@@ -66,7 +67,7 @@ fun SessionsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.createSession() },
+                onClick = { viewModel.createSession { sessionId -> onSessionCreated(sessionId) } },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(Icons.Default.Add, "New Session")

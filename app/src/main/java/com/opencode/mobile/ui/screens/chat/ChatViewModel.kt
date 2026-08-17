@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.opencode.mobile.data.model.*
 import com.opencode.mobile.data.repository.OpenCodeRepository
+import com.opencode.mobile.data.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -30,7 +31,8 @@ data class ChatUiState(
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val repository: OpenCodeRepository
+    private val repository: OpenCodeRepository,
+    private val settings: SettingsRepository
 ) : ViewModel() {
 
     private val sessionId: String = savedStateHandle["sessionId"] ?: ""
@@ -66,7 +68,13 @@ class ChatViewModel @Inject constructor(
         if (text.isBlank()) return
 
         viewModelScope.launch {
-            // Add user message to UI immediately
+            val providerId = settings.selectedProvider.first()
+            val modelId = settings.selectedModel.first()
+            if (providerId.isBlank() || modelId.isBlank()) {
+                _uiState.update { it.copy(error = "Select a model in Settings first") }
+                return@launch
+            }
+
             val userMessage = Message(
                 id = "user-${System.currentTimeMillis()}",
                 role = "user",

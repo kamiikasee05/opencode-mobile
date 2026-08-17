@@ -29,6 +29,9 @@ fun OpenCodeNavHost() {
                 onSessionClick = { sessionId ->
                     navController.navigate(Screen.Chat.createRoute(sessionId))
                 },
+                onSessionCreated = { sessionId ->
+                    navController.navigate(Screen.Chat.createRoute(sessionId))
+                },
                 onSettingsClick = {
                     navController.navigate(Screen.Settings.route)
                 }

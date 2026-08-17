@@ -4,6 +4,7 @@ import com.opencode.mobile.data.model.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -64,8 +65,12 @@ class OpenCodeApi @Inject constructor(
         }.body()
 
     suspend fun sendPromptAsync(sessionId: String, request: PromptAsyncRequest) {
-        client.post(url("session/$sessionId/prompt_async")) {
+        val response = client.post(url("session/$sessionId/prompt_async")) {
             setBody(request)
+        }
+        if (response.status.value >= 400) {
+            val errorBody = response.bodyAsText()
+            throw Exception("Server error ${response.status.value}: $errorBody")
         }
     }
 
