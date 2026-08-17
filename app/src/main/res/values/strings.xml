@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenCode</string>
+    <string name="settings">Settings</string>
+    <string name="sessions">Sessions</string>
+    <string name="new_session">New Session</string>
+    <string name="send_message">Send message…</string>
+    <string name="connecting">Connecting…</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="server_url">Server URL</string>
+    <string name="password">Password (optional)</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="select_model">Select Model</string>
+    <string name="select_agent">Select Agent</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="permission_allow">Allow</string>
+    <string name="permission_deny">Deny</string>
+    <string name="permission_remember">Remember</string>
+    <string name="no_sessions">No sessions yet. Tap + to create one.</string>
+    <string name="error_connection">Connection error</string>
+    <string name="error_server">Could not reach server</string>
+    <string name="aborted">Aborted</string>
+    <string name="share">Share</string>
+    <string name="fork">Fork</string>
+    <string name="code">Code</string>
+    <string name="terminal">Terminal</string>
+</resources>
