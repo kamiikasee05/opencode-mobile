@@ -6,7 +6,6 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.*
-import io.ktor.http.ContentType.Companion.Application
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,7 +31,7 @@ class OpenCodeApi @Inject constructor(
 
     suspend fun createSession(request: CreateSessionRequest = CreateSessionRequest()): Session =
         client.post(url("session")) {
-            contentType(Application.Json)
+            contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
 
@@ -45,7 +44,7 @@ class OpenCodeApi @Inject constructor(
 
     suspend fun updateSession(id: String, request: UpdateSessionRequest): Session =
         client.patch(url("session/$id")) {
-            contentType(Application.Json)
+            contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
 
@@ -64,13 +63,13 @@ class OpenCodeApi @Inject constructor(
 
     suspend fun sendMessage(sessionId: String, request: SendMessageRequest): Message =
         client.post(url("session/$sessionId/message")) {
-            contentType(Application.Json)
+            contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
 
     suspend fun sendPromptAsync(sessionId: String, request: PromptAsyncRequest) {
         val response = client.post(url("session/$sessionId/prompt_async")) {
-            contentType(Application.Json)
+            contentType(ContentType.Application.Json)
             setBody(request)
         }
         if (response.status.value >= 400) {
@@ -82,7 +81,7 @@ class OpenCodeApi @Inject constructor(
     // -- Permissions --
     suspend fun respondPermission(sessionId: String, permissionId: String, response: PermissionResponse) {
         client.post(url("session/$sessionId/permissions/$permissionId")) {
-            contentType(Application.Json)
+            contentType(ContentType.Application.Json)
             setBody(response)
         }
     }
@@ -100,7 +99,7 @@ class OpenCodeApi @Inject constructor(
 
     suspend fun updateConfig(config: Config): Config =
         client.patch(url("config")) {
-            contentType(Application.Json)
+            contentType(ContentType.Application.Json)
             setBody(config)
         }.body()
 }
