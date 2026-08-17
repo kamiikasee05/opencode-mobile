@@ -2,6 +2,7 @@ package com.opencode.mobile.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class Provider(
@@ -33,8 +34,7 @@ data class Agent(
 @Serializable
 data class Config(
     val model: ModelRef? = null,
-    val agent: String? = null,
-    @SerialName("provider") val providers: Map<String, JsonElement>? = null
+    val agent: String? = null
 )
 
 @Serializable
