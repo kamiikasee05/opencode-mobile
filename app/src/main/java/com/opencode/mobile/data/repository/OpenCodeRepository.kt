@@ -27,10 +27,8 @@ class OpenCodeRepository @Inject constructor(
         currentBaseUrl = url
         currentPassword = pass
 
-        // Reconfigure ktor client with auth
-        httpClient.config {
-            // Note: we handle auth per-request in the API layer
-        }
+        // Set the base URL on the API so all requests use absolute URLs
+        api.baseUrl = url
     }
 
     fun connectSse() {
